@@ -1,0 +1,26 @@
+# secrets / generated keys and certs
+certs/*.key
+certs/*.pem
+!certs/.gitkeep
+.env
+
+# runtime demo state (e.g. the "stolen" token Script B reads)
+demo_state/
+*.jwk
+*.pem
+*.key
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# os
+.DS_Store
+.playwright-mcp/
+.playwright-mcp/

@@ -1,0 +1,30 @@
+# Financial API Sentinel decision policy (Phase 7C.5).
+#
+# Loaded once, at addon startup, by proxy/policy.py. Not hot-reloaded --
+# change this file and restart `make proxy` to pick up new values. A
+# malformed file fails startup immediately, loudly (doc 04 SS5 fail-closed
+# spirit) -- there is no silent fallback to hardcoded defaults.
+#
+# Hard signals (DPoP validity, JA4 match, jkt match, token revocation) are
+# deliberately NOT configurable here. doc 04 treats the hard/soft split
+# itself as a security-architecture decision, not something a policy file
+# should be able to loosen -- only thresholds and soft-signal weights are
+# tunable. Loosening a hard signal into a weighted one would be exactly
+# the kind of quiet security regression this project exists to catch, not
+# something to make easy via a YAML edit.
+
+# BLOCK once accumulated soft-signal risk reaches this. Must be strictly
+# greater than challenge_threshold, or the step-up band below is empty.
+risk_threshold: 2
+
+# [challenge_threshold, risk_threshold) is the step-up band (Phase 7C.2):
+# neither auto-passed nor auto-blocked, held for a fresh nonce-signed
+# proof instead.
+challenge_threshold: 1
+
+# Points added to the risk score per soft signal that doesn't match the
+# binding. Keys must be exactly these two -- proxy/policy.py rejects
+# unknown or missing keys rather than silently defaulting a typo to 0.
+soft_signal_weights:
+  ip_delta: 1
+  ja4h_delta: 2
